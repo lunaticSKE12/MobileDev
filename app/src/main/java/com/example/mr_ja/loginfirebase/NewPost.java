@@ -29,7 +29,7 @@ import com.google.firebase.storage.UploadTask;
 
 public class NewPost extends AppCompatActivity {
 
-    Button selectImage,postBtn;
+    Button selectImage,postBtn, viewPostBtn;
     ImageView imageView;
     TextView titleText;
     public static final  int READ_EXTERNAL_STORAGE = 0;
@@ -50,6 +50,7 @@ public class NewPost extends AppCompatActivity {
         postBtn = (Button) findViewById(R.id.postBtn_id);
         titleText = (TextView) findViewById(R.id.title_id);
         imageView = (ImageView) findViewById(R.id.imageView_id);
+        viewPostBtn = (Button) findViewById(R.id.viewPostBtn_id);
 
         //progress bar
         mProgressDialog = new ProgressDialog(NewPost.this);
@@ -90,6 +91,13 @@ public class NewPost extends AppCompatActivity {
                 Firebase chileRef_name = mRootRef.child("Image_Title");
                 chileRef_name.setValue(mName);
                 Toast.makeText(getApplicationContext(), "Updated info",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        viewPostBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ViewPosts.class));
             }
         });
 
