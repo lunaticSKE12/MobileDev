@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +33,9 @@ public class ViewPosts extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         mRef = FirebaseDatabase.getInstance().getReference("User_detail");
         recyclerView = (RecyclerView) findViewById(R.id.viewPostData_id);
-        recyclerView.setLayoutManager(new LinearLayoutManager(ViewPosts.this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ViewPosts.this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(true);
         Toast.makeText(ViewPosts.this, "Please wait, it is loading...",Toast.LENGTH_SHORT).show();
     }
 
@@ -80,7 +84,7 @@ public class ViewPosts extends AppCompatActivity {
         recyclerView.setAdapter(mFirebaseAdapter);
     }
 
-    public static  class ShowDataViewHolder extends RecyclerView.ViewHolder{
+    public static class ShowDataViewHolder extends RecyclerView.ViewHolder{
 
         private final TextView image_title;
         private final ImageView image_url;
@@ -91,6 +95,13 @@ public class ViewPosts extends AppCompatActivity {
             image_title = (TextView) itemView.findViewById(R.id.fetch_image_title_id);
 
 
+        }
+
+        public RecyclerView.ViewHolder onCreateHolder(ViewGroup viewGroup, int i){
+            View v = LayoutInflater.from(viewGroup.getContext())
+                    .inflate(R.layout.viewsingleitem, viewGroup, false);
+            RecyclerView.ViewHolder viewHolder = new ShowDataViewHolder(v);
+            return viewHolder;
         }
 
         private void Image_Title(String title){

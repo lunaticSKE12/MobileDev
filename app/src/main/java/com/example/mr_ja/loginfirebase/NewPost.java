@@ -123,56 +123,56 @@ public class NewPost extends AppCompatActivity {
     }
 
     //After selecting image, it will be uploaded to firebase
-//    public void onActivityResult(int requestCode, int resultCode, Intent data){
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if(requestCode == GALLERY_INTENT && resultCode == RESULT_OK){
-//            mImageUri = data.getData();
-//            imageView.setImageURI(mImageUri);
-//            StorageReference filePath = mStorage.child("User_Image")
-//                    .child(mImageUri.getLastPathSegment());
-//            mProgressDialog.setMessage("Upd=lolading...");
-//            mProgressDialog.show();
-//
-//            filePath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                    Uri downloadUri = taskSnapshot.getDownloadUrl();
-//                    mRootRef.child("Image_URL").setValue(downloadUri.toString());
-//                    Glide.with(getApplicationContext()).load(downloadUri)
-//                            .crossFade()
-//                            .placeholder(R.drawable.loading)
-//                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
-//                            .into(imageView);
-//                    Toast.makeText(getApplicationContext(),"Updated...",Toast.LENGTH_SHORT).show();
-//                    mProgressDialog.dismiss();
-//                }
-//            });
-//        }
-//    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == GALLERY_INTENT && resultCode == RESULT_OK){
             mImageUri = data.getData();
             imageView.setImageURI(mImageUri);
-            StorageReference filePath = mStorage.child("User_Images").child(mImageUri.getLastPathSegment());
-
+            StorageReference filePath = mStorage.child("User_Image")
+                    .child(mImageUri.getLastPathSegment());
             mProgressDialog.setMessage("Updating...");
             mProgressDialog.show();
 
             filePath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Uri downloadUri = taskSnapshot.getUploadSessionUri();
-                    mDatabaseRef.child("Image_URL").setValue(downloadUri.toString());
-//                    postBtn.setEnabled(false);
+                    Uri downloadUri = taskSnapshot.getDownloadUrl();
+                    mRootRef.child("Image_URL").setValue(downloadUri.toString());
+                    Glide.with(getApplicationContext()).load(downloadUri)
+                            .crossFade()
+                            .placeholder(R.drawable.loading)
+                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                            .into(imageView);
                     Toast.makeText(getApplicationContext(),"Updated...",Toast.LENGTH_SHORT).show();
                     mProgressDialog.dismiss();
                 }
             });
         }
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if(requestCode == GALLERY_INTENT && resultCode == RESULT_OK){
+//            mImageUri = data.getData();
+//            imageView.setImageURI(mImageUri);
+//            StorageReference filePath = mStorage.child("User_Image").child(mImageUri.getLastPathSegment());
+//
+//            mProgressDialog.setMessage("Updating...");
+//            mProgressDialog.show();
+//
+//            filePath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                    Uri downloadUri = taskSnapshot.getUploadSessionUri();
+//                    mDatabaseRef.child("Image_URL").setValue(downloadUri.toString());
+////                    postBtn.setEnabled(false);
+//                    Toast.makeText(getApplicationContext(),"Updated...",Toast.LENGTH_SHORT).show();
+//                    mProgressDialog.dismiss();
+//                }
+//            });
+//        }
+//    }
 }

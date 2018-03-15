@@ -21,7 +21,10 @@
         </activity>
         <activity android:name=".signin" />
         <activity android:name=".NewPost" />
-        <activity android:name=".ViewPosts"></activity>
+        <activity android:name=".ViewPosts" />
+        <activity android:name=".ViewLocation"></activity>
+
+        <service android:name=".GPSTracker" />
     </application>
 
 </manifest>
