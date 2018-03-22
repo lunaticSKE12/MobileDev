@@ -10,7 +10,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 /**
  * Created by Mr_Ja on 3/15/2018.
@@ -24,7 +26,7 @@ public class GPSTracker extends Service implements LocationListener {
     //is Network enabled
     boolean isNetWorkEnabled = false;
     //is able to get location
-    boolean canGetLocation = false;
+    boolean canGetLocation = true;
 
     Location location;
     double latitude;
@@ -37,7 +39,7 @@ public class GPSTracker extends Service implements LocationListener {
 
     public GPSTracker(Context context){
         this.mContext = context;
-        getApplication();
+        getLocation();
     }
 
     public Location getLocation(){
@@ -50,31 +52,35 @@ public class GPSTracker extends Service implements LocationListener {
             if(!isGPSEnabled && !isNetWorkEnabled){
                 //no network
             }else{
-//                this.canGetLocation = true;
-//                if (isNetWorkEnabled){
-//                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-//                            MIN_TIME_BW_UPDATES,MIN_DISTANCE_CHANGE_FOR_UPDATES,this);
-//                    if (locationManager != null){
-//                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-//
-//                        if (location != null){
-//                            latitude = location.getLatitude();
-//                            longitude = location.getLongitude();
-//                        }
-//                    }
-//                }
-//                if (isGPSEnabled){
-//                    if (location == null){
-//                        locationManager.requestLocationUpdates(
-//                                LocationManager.GPS_PROVIDER,
-//                                MIN_TIME_BW_UPDATES,
-//                                MIN_DISTANCE_CHANGE_FOR_UPDATES,this);
-//                        if (location != null){
-//                            latitude = location.getLatitude();
-//                            longitude = location.getLongitude();
-//                        }
-//                    }
-//                }
+                this.canGetLocation = true;
+                if (isNetWorkEnabled){
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                            MIN_TIME_BW_UPDATES,MIN_DISTANCE_CHANGE_FOR_UPDATES,this);
+                    if (locationManager != null){
+                        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+                        if (location != null){
+                            latitude = location.getLatitude();
+                            longitude = location.getLongitude();
+                        }
+                    }
+                }
+                if (isGPSEnabled){
+                    if (location != null){
+                        locationManager.requestLocationUpdates(
+                                LocationManager.GPS_PROVIDER,
+                                MIN_TIME_BW_UPDATES,
+                                MIN_DISTANCE_CHANGE_FOR_UPDATES,this);
+                        if (locationManager != null) {
+                            location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+                            if (location != null) {
+                                latitude = location.getLatitude();
+                                longitude = location.getLongitude();
+                            }
+                        }
+                    }
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -103,7 +109,7 @@ public class GPSTracker extends Service implements LocationListener {
         return longitude;
     }
 
-    public boolean isCanGetLocation(){
+    public boolean canGetLocation(){
         return this.canGetLocation;
     }
 
@@ -119,9 +125,19 @@ public class GPSTracker extends Service implements LocationListener {
         alertDialog.setPositiveButton("Setting", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent();
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                mContext.startActivity(intent);
             }
         });
+
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        alertDialog.show();
     }
 
     @Nullable

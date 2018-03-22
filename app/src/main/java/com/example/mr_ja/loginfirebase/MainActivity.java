@@ -46,9 +46,11 @@ public class MainActivity extends AppCompatActivity {
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String getemail = email.getText().toString();
-                String getpassword = password.getText().toString();
-                callsignin(getemail,getpassword);
+//                String getemail = email.getText().toString();
+//                String getpassword = password.getText().toString();
+//                callsignin(getemail,getpassword);
+                Intent i = new Intent(MainActivity.this,signin.class);
+                startActivity(i);
 
             }
         });
