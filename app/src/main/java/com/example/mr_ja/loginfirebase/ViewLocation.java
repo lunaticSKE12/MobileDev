@@ -78,23 +78,25 @@ public class ViewLocation extends AppCompatActivity {
             public void run() {
                long millis = System.currentTimeMillis() - startTime;
                long secs = millis / 1000 % 60; //0-59
-                gps = new GPSTracker(ViewLocation.this);
 
-                if (gps.canGetLocation()){
-                    double latitude = gps.getLatitude();
-                    double longitude = gps.getLongitude();
-
-                    Toast.makeText(getApplicationContext(), counter + "\nCurrent location is \n Lat: " + latitude
-                            + "\nLong: " + longitude, Toast.LENGTH_SHORT).show();
-                }else {
-                    gps.showSettingAlert();
-                }
 
                 timeString = String.format("%02d", secs);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         timerView.setText(timeString);
+
+                        gps = new GPSTracker(ViewLocation.this);
+
+                        if (gps.canGetLocation()){
+                            double latitude = gps.getLatitude();
+                            double longitude = gps.getLongitude();
+
+                            Toast.makeText(getApplicationContext(), counter + "\nCurrent location is \n Lat: " + latitude
+                                    + "\nLong: " + longitude, Toast.LENGTH_SHORT).show();
+                        }else {
+                            gps.showSettingAlert();
+                        }
                     }
                 });
                 h.postDelayed(task,1000);
